@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Login bem-sucedido: armazena o ID do professor na sessão
             $_SESSION['professor_id'] = $professor['id'];
             $_SESSION['professor_nome'] = $professor['nome']; // Opcional: armazena o nome também
-            header("Location: painel/professor_dashboard.php"); // Redireciona para o dashboard
+            header("Location: painel/teste.php"); // Redireciona para o dashboard
             exit();
         } else {
             // Senha inválida
