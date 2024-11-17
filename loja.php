@@ -17,7 +17,9 @@ if (!$aluno) {
     die("Aluno não encontrado.");
 }
 
-$professor_nome = htmlspecialchars($_SESSION['nome']);
+// Consulta os produtos disponíveis na loja
+$produtosStmt = $pdo->query("SELECT * FROM Produtos");
+$produtos = $produtosStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -71,73 +73,31 @@ $professor_nome = htmlspecialchars($_SESSION['nome']);
 				<!-- Título da categoria -->
 				<div class="row margin-vertical">
 					<div class="col-6-sm">
-						<h3 class="segment-title left">Eletrônicos</h3> <!-- Categoria  -->
+						<h3 class="segment-title left">Populares</h3> <!-- Categoria  -->
 					</div>
-					<div class="col-6-sm right">
-						<a href="#" class="btn btn-primary1">Populares <alt="Ícone dropdown"></a>
-					</div>
+
 				</div>
 
 				<!-- Grade de produtos -->
+				
 				<div class="row">
+				<?php foreach ($produtos as $produto): ?>
 					<div class="col-6-sm">
 						<div class="product">
-							<img src="https://i.pinimg.com/originals/ad/93/b2/ad93b255e78fba7030ef006a2d310315.png" alt="Fone de ouvido">
+						<img src="<?= htmlspecialchars($produto['imagem']); ?>" alt="<?= htmlspecialchars($produto['nome']); ?>">
 							<div class="detail">
-								<h4 class="name">Fones de ouvido</h4> <!-- Nome do produto  -->
+								<h4 class="name"><?= htmlspecialchars($produto['nome']); ?></h4> <!-- Nome do produto  -->
 								<div class="detail-footer">
-									<div class="price left">R$66,99</div> <!-- Preço formatado -->
-									<div class="review right"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas de avaliação">4,3</div>
+									<div class="price left"><?= htmlspecialchars($produto['descricao']); ?></div> <!-- Preço formatado -->
+									<div class="review right"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Moedas"><?= number_format($produto['moeda']); ?> moedas</div>
 								</div>
 							</div>
 							<div class="star"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas"></div>
 						</div>
 					</div>
-					<div class="col-6-sm">
-						<div class="product">
-							<img src="https://pngimg.com/uploads/gamepad/gamepad_PNG54.png" alt="Controlador de jogo">
-							<div class="detail">
-								<h4 class="name">Controle</h4> <!-- Nome do produto  -->
-								<div class="detail-footer">
-									<div class="price left">R$116,99</div> <!-- Preço formatado -->
-									<div class="review right"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas de avaliação">4,5</div>
-								</div>
-							</div>
-							<div class="star"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas"></div>
-						</div>
-					</div>
-				</div>
+				<?php endforeach; ?>
+				
 
-				<!-- Título da categoria -->
-				<div class="row margin-vertical">
-					<div class="col-6-sm">
-						<h3 class="segment-title left">Fones de ouvido sem fio</h3> <!-- Categoria  -->
-					</div>
-					<div class="col-6-sm right">
-						<a href="#" class="btn btn-primary">Categoria <img src="https://design-fenix.com.ar/codepen/ui-store/dropdown.png" alt="Ícone dropdown"></a>
-					</div>
-				</div>
-
-				<!-- Produto em destaque -->
-				<div class="row">
-					<div class="col-12">
-						<div class="featured-product">
-							<div class="content-img">
-								<img src="https://design-fenix.com.ar/codepen/ui-store/earbuds.png" alt="Fones de ouvido sem fio Beams Pro">
-							</div>
-							<div class="product-detail">
-								<h4 class="product-name">Fones Beams Pro</h4> <!-- Nome do produto  -->
-								<p class="price">R$89,00</p> <!-- Preço formatado -->
-							</div>
-							<div class="star"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas de avaliação"><span class="review">4,5</span></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
-
-	
 </body>
 
 </html>

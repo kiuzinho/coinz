@@ -11,6 +11,7 @@ if (!isset($_SESSION['professor_id'])) {
 // Inicializa variáveis
 $alunos = [];
 $erro = "";
+$professor_nome = htmlspecialchars($_SESSION['professor_nome']);
 
 // Processa a pesquisa do professor
 if (isset($_GET['pesquisa'])) {
@@ -24,119 +25,101 @@ if (isset($_GET['pesquisa'])) {
     }
 }
 
-// Adiciona/remova moedas se o professor clicar em uma ação
-if (isset($_POST['aluno_id']) && isset($_POST['valor'])) {
-    $aluno_id = (int) $_POST['aluno_id'];
-    $valor = (int) $_POST['valor'];
-    $descricao = $_POST['descricao'];
-
-    // Atualiza o saldo do aluno
-    $stmt = $pdo->prepare("UPDATE alunos SET moedas = moedas + :valor WHERE id = :id");
-    $stmt->execute([':valor' => $valor, ':id' => $aluno_id]);
-
-    // Registra a transação
-    $stmt = $pdo->prepare("INSERT INTO transacoes (aluno_id, professor_id, valor, descricao) VALUES (:aluno_id, :professor_id, :valor, :descricao)");
-    $stmt->execute([
-        ':aluno_id' => $aluno_id,
-        ':professor_id' => $_SESSION['professor_id'],
-        ':valor' => $valor,
-        ':descricao' => $descricao
-    ]);
-
-    // Mensagem de sucesso (opcional)
-    header("Location: professor_dashboard.php?pesquisa=$pesquisa");
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Professor</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
-        h1 {
-            color: #333;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        .erro {
-            color: red;
-        }
-        .aluno {
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            margin-right: 5px;
-            padding: 5px 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .actions {
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="../asset/loja.css"> <!-- Link para o CSS -->
+     <link rel="stylesheet" href="../asset/button.css"> <!-- Link para o CSS -->
 </head>
+
 <body>
-    <h1>Painel do Professor</h1>
-
-    <form method="GET" action="professor_dashboard.php">
-        <label for="pesquisa">Pesquisar Aluno:</label>
-        <input type="text" id="pesquisa" name="pesquisa" placeholder="Digite o nome do aluno" required>
-        <button type="submit">Pesquisar</button>
-    </form>
-
-    <?php if (!empty($erro)): ?>
-        <p class="erro"><?= htmlspecialchars($erro) ?></p>
-    <?php endif; ?>
-
-    <?php foreach ($alunos as $aluno): ?>
-        <div class="aluno">
-            <h3><?= htmlspecialchars($aluno['nome']) ?> (ID: <?= $aluno['id'] ?>)</h3>
-            <p>Saldo Atual: <?= $aluno['moedas'] ?> moedas</p>
-            <div class="actions">
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="aluno_id" value="<?= $aluno['id'] ?>">
-                    <input type="hidden" name="valor" value="5">
-                    <input type="hidden" name="descricao" value="Fez a atividade">
-                    <button type="submit">Fez a atividade [5+]</button>
-                </form>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="aluno_id" value="<?= $aluno['id'] ?>">
-                    <input type="hidden" name="valor" value="5">
-                    <input type="hidden" name="descricao" value="Fez a atividade">
-                    <button type="submit">Coisa boa [5+]</button>
-                </form>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="aluno_id" value="<?= $aluno['id'] ?>">
-                    <input type="hidden" name="valor" value="-10">
-                    <input type="hidden" name="descricao" value="Conversou na aula">
-                    <button type="submit" style="background-color: #FF5733;">Conversou na aula [10-]</button>
-                </form>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="aluno_id" value="<?= $aluno['id'] ?>">
-                    <input type="hidden" name="valor" value="-10">
-                    <input type="hidden" name="descricao" value="Conversou na aula">
-                    <button type="submit" style="background-color: #FF5733;">Coisa ruim [10-]</button>
-                </form>
+    <div id="wrapper">
+        <!-- Cabeçalho -->
+        <header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-4-sm"><a href="logout.php" class="btn">Sair</a></div>
+                    <div class="col-4-sm center">
+                        <h1 class="page-title">Painel do Professor</h1>
+                    </div>
+                    <div class="col-4-sm right">
+                        <div class="profile"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        </header>
+
+        <section>
+            <div class="container-fluid">
+                <!-- Cartão principal -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="hero-card">
+                            <div class="content-image">
+                                <img src="../asset/img/professor.png" alt="Imagem do professor">
+                            </div>
+                            <div class="card-content">
+                                <h3>Olá, <?= $professor_nome; ?>!</h3> <!-- Saudação -->
+                                <p>Pesquisar aluno</p> <!-- Descrição -->
+                                <form method="GET" action="professor_dashboard.php">
+                                    <div class="content-input">
+                                        <input type="text" id="pesquisa" name="pesquisa" placeholder="Pesquisar aluno" required>
+                                        
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Título da categoria -->
+                <div class="row margin-vertical">
+                    <div class="col-6-sm">
+                        <h3 class="segment-title left">Lista de Alunos</h3>
+                    </div>
+                </div>
+
+                <!-- Alunos encontrados -->
+                <?php if (!empty($erro)): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="erro"><?= htmlspecialchars($erro) ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <div class="row">
+                    <?php foreach ($alunos as $aluno): ?>
+                        <div class="col-6-sm">
+                            
+                            <div class="product">
+                            <form method="POST" style="display:inline;">
+                            <input type="hidden" name="aluno_id" value="<?= $aluno['id'] ?>">
+                            <input type="hidden" name="valor" value="5">
+                            <input type="hidden" name="descricao" value="Fez a atividade">
+                            <button class="noselect"><span class="text">-5</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                </form>
+                                <div class="detail">
+                                    <h4 class="name"><?= htmlspecialchars($aluno['nome']) ?></h4>
+                                    <div class="detail-footer">
+                                        <div class="price left">ID: <?= $aluno['id'] ?></div>
+                                        <div class="review right"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas de avaliação"><?= $aluno['moedas'] ?> moedas</div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+    </div>
 </body>
+
 </html>
