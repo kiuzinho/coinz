@@ -18,7 +18,7 @@ if (!$aluno) {
 }
 
 // Consulta os produtos disponíveis na loja
-$produtosStmt = $pdo->query("SELECT * FROM Produtos");
+$produtosStmt = $pdo->query("SELECT * FROM produtos");
 $produtos = $produtosStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -30,6 +30,30 @@ $produtos = $produtosStmt->fetchAll(PDO::FETCH_ASSOC);
 	<title>Loja</title>
 	<!-- Link para o arquivo CSS -->
 	<link rel="stylesheet" href="asset/loja.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0.0/css/fontawesome.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0.0/css/all.min.css" rel="stylesheet">
+
+	<style>
+		        @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+				@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+				.coin-font {
+    font-family: "Press Start 2P", cursive; /* Altere a fonte aqui */
+    font-size: 1.5em; /* Ajuste o tamanho da fonte */
+    color: gold; /* Altere a cor, se necessário */
+}		
+		.coins {
+            display: flex;
+            align-items: center;
+            font-size: 1.2em;
+        }
+
+        .coins img {
+            width: 24px;
+            margin-right: 10px;
+        }
+
+	</style>
+
 </head>
 
 <body>
@@ -38,13 +62,18 @@ $produtos = $produtosStmt->fetchAll(PDO::FETCH_ASSOC);
 		<header>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-4-sm"><a href="#" class="btn"><i class="gg-layout-grid"></i></a></div>
+				<a href="aluno.php?id=<?= $aluno['id']; ?>" class="btn" style="color: #ffffff;">
+    			<i class="fas fa-chevron-left"></i>
+				</a>
+
 					<div class="col-4-sm center">
 						<h1 class="page-title">Loja</h1> <!-- Título  -->
 					</div>
-					<div class="col-4-sm right">
-						<div class="profile"></div>
-					</div>
+
+				<div class="coins">
+    				<img src="asset/img/coin.gif" alt="Moeda">
+    				<span class="coin-font"><?= htmlspecialchars($aluno['moedas'], ENT_QUOTES, 'UTF-8'); ?></span>
+				</div>
 				</div>
 			</div>
 		</header>
@@ -89,10 +118,15 @@ $produtos = $produtosStmt->fetchAll(PDO::FETCH_ASSOC);
 								<h4 class="name"><?= htmlspecialchars($produto['nome']); ?></h4> <!-- Nome do produto  -->
 								<div class="detail-footer">
 									<div class="price left"><?= htmlspecialchars($produto['descricao']); ?></div> <!-- Preço formatado -->
-									<div class="review right"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Moedas"><?= number_format($produto['moeda']); ?> moedas</div>
+									<div class="review right"><img src="asset/img/coin.gif" alt="Moedas"><?= number_format($produto['moeda']); ?> moedas</div>
 								</div>
 							</div>
-							<div class="star"><img src="https://design-fenix.com.ar/codepen/ui-store/stars.png" alt="Estrelas"></div>
+							<div class="star">
+    <a href="confirmacao.php?produto_id=<?= $produto['id']; ?>&aluno_id=<?= $aluno['id']; ?>">
+        <img src="asset/img/carrinho.png" alt="Carrinho">
+    </a>
+</div>
+
 						</div>
 					</div>
 				<?php endforeach; ?>

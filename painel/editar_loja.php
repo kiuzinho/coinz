@@ -1,14 +1,13 @@
 <?php
 // Conexão com o banco de dados
-require '../db.php'; // Certifique-se de que esse arquivo está configurado corretamente
 
 session_start();
 require '../db.php'; // Conexão com o banco
 
 // Verifica se o professor está logado
-if (!isset($_SESSION['professor_id'])) {
-    header("Location: login.php");
-    exit();
+if (!isset($_SESSION['usuario_id']) || $_SESSION['tipo_usuario'] !== 'secretaria') {
+    header("Location: ../login.php");
+    exit;
 }
 
 // Verifica se o diretório existe e cria, se necessário
