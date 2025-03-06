@@ -35,22 +35,22 @@ try {
 } catch (PDOException $e) {
     die("Erro ao conectar ao banco de dados: " . $e->getMessage());
 }
+$stmt = $pdo->query("
+    SELECT 
+        s.id AS solicitacao_id,
+        a.nome AS aluno_nome,
+        m.nome AS missao_nome,
+        m.descricao,
+        m.xp,
+        m.moedas
+    FROM solicitacoes_missoes s
+    JOIN alunos a ON s.aluno_id = a.id
+    JOIN missoes m ON s.missao_id = m.id
+    WHERE s.status = 'pendente'
+");
+$solicitacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!--
-=========================================================
-* Paper Dashboard 2 - v2.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-2
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,29 +59,36 @@ Coded by www.creative-tim.com
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-    Painel Secretaria
-  </title>
+  <title>Painel Secretaria</title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-  <!--     Fonts and icons     -->
+  <!-- Fonts and icons -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
   <!-- CSS Files -->
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <style>
+    .navbar-toggler-bar {
+      display: none;
+    }
+    .main-panel.d-md-none .navbar-nav .nav-link {
+    color: #000 !important; /* Define a cor do texto como preta */
+  }
+
+  .main-panel.d-md-none .navbar-nav .nav-link:hover {
+    color: #007bff !important; /* Cor de hover azul */
+  }
+  </style>
 </head>
 
-<body class="">
-  <div class="wrapper ">
+<body>
+  <div class="wrapper">
     <div class="sidebar" data-color="white" data-active-color="danger">
       <div class="logo">
-        <a href="index.html" class="simple-text logo-mini">
+        <a href="dashboard.php" class="simple-text logo-mini">
           <div class="logo-image-small">
-            <img src="../assets/img/logo-small.png">
+            <img src="../assets/img/logo-small.png" alt="Logo">
           </div>
-          <!-- <p>CT</p> -->
         </a>
         <a href="dashboard.php" class="simple-text logo-normal">
           Painel
@@ -89,23 +96,16 @@ Coded by www.creative-tim.com
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li class="active">
             <a href="./dashboard.php">
               <i class="nc-icon nc-bank"></i>
               <p>Dashboard</p>
             </a>
           </li>
           <li>
-            <a href="./icons.php">
-              <i class="nc-icon nc-diamond"></i>
-              <p>Icons</p>
-            </a>
-          </li>
-
-          <li>
-            <a href="./notifications.php">
-              <i class="nc-icon nc-bell-55"></i>
-              <p>Notifications</p>
+            <a href="./editar_professor.php">
+              <i class="nc-icon nc-glasses-2"></i>
+              <p>Editar Professores</p>
             </a>
           </li>
           <li>
@@ -122,55 +122,84 @@ Coded by www.creative-tim.com
           </li>
           <li>
             <a href="./editar_aluno.php">
-              <i class="nc-icon nc-caps-small"></i>
+              <i class="nc-icon nc-single-02"></i>
               <p>Editar Aluno</p>
             </a>
           </li>
-
+          <li>
+            <a href="./editar_secretaria.php">
+              <i class="nc-icon nc-badge"></i>
+              <p>Editar Secretários</p>
+            </a>
+          </li>
+          <li>
+            <a href="./missoes.php">
+              <i class="nc-icon nc-user-run"></i>
+              <p>Aprovar Missões</p>
+            </a>
+          </li>
+          <li>
+            <a href="./editar_missoes.php">
+              <i class="nc-icon nc-controller-modern"></i>
+              <p>Editar Missões</p>
+            </a>
+          </li>
+          <li>
+            <a href="./turmas.php">
+              <i class="nc-icon nc-controller-modern"></i>
+              <p>Turmas</p>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
+
+    <!-- Painel principal para dispositivos móveis -->
+    <div class="main-panel d-md-none"> <!-- Visível apenas em dispositivos móveis -->
+      <!-- Aqui vai o conteúdo do painel principal -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler-icon" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="dashboard.php">Dashboard <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="tables.php">Aprovar Compras</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_professor.php">Editar Professores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_secretaria.php">Editar Secretários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_aluno.php">Editar Alunos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_loja.php">Editar Loja</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="missoes.php">Aprovar Missões</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="turmas.php">Turmas</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Painel principal para telas grandes -->
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
         <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <div class="navbar-toggle">
-              <button type="button" class="navbar-toggler">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-              </button>
-            </div>
-            <a class="navbar-brand" href="javascript:;">Dashboard da Secretaria</a>
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-          </button>
           <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <form>
-              <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <i class="nc-icon nc-zoom-split"></i>
-                  </div>
-                </div>
-              </div>
-            </form>
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link btn-magnify" href="javascript:;">
-                  <i class="nc-icon nc-layout-11"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Stats</span>
-                  </p>
-                </a>
-              </li>
               <li class="nav-item btn-rotate dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="nc-icon nc-bell-55"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Some Actions</span>
@@ -183,7 +212,7 @@ Coded by www.creative-tim.com
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link btn-rotate" href="javascript:;">
+                <a class="nav-link btn-rotate" href="javascript:;" data-bs-toggle="modal" data-bs-target="#editAccountModal">
                   <i class="nc-icon nc-settings-gear-65"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Account</span>
@@ -194,14 +223,12 @@ Coded by www.creative-tim.com
           </div>
         </div>
       </nav>
-      <!-- End Navbar -->
+
       <div class="content">
         <div class="row">
-
           <div class="col-lg-3 col-md-6 col-sm-6">
-
             <div class="card card-stats">
-              <div class="card-body ">
+              <div class="card-body">
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
@@ -211,201 +238,148 @@ Coded by www.creative-tim.com
                   <div class="col-7 col-md-8">
                     <div class="numbers">
                       <p class="card-category">Alunos</p>
-                      <p class="card-title"><strong><?= $total_alunos; ?></strong><p>
+                      <p class="card-title"><strong><?= $total_alunos; ?></strong></p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="card-footer ">
+              <div class="card-footer">
                 <hr>
                 <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Update Now
+                  <i class="fa fa-refresh"></i> Atualizado agora 
                 </div>
               </div>
             </div>
-
           </div>
 
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="card card-stats">
-              <div class="card-body ">
+              <div class="card-body">
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-money-coins text-success"></i>
+                      <i class="nc-icon nc-box text-primary"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
                     <div class="numbers">
                       <p class="card-category">Produtos</p>
-                      <p class="card-title"> <strong><?= $total_produtos; ?></strong>  <p>
+                      <p class="card-title"><strong><?= $total_produtos; ?></strong></p>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar-o"></i>
-                  Last day
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-vector text-danger"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Errors</p>
-                      <p class="card-title">23<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-clock-o"></i>
-                  In the last hour
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-favourite-28 text-primary"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Followers</p>
-                      <p class="card-title">+45K<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Update now
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Users Behavior</h5>
-                <p class="card-category">24 Hours performance</p>
-              </div>
-              <div class="card-body ">
-                <canvas id=chartHours width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-history"></i> Updated 3 minutes ago
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Email Statistics</h5>
-                <p class="card-category">Last Campaign Performance</p>
-              </div>
-              <div class="card-body ">
-                <canvas id="chartEmail"></canvas>
-              </div>
-              <div class="card-footer ">
-                <div class="legend">
-                  <i class="fa fa-circle text-primary"></i> Opened
-                  <i class="fa fa-circle text-warning"></i> Read
-                  <i class="fa fa-circle text-danger"></i> Deleted
-                  <i class="fa fa-circle text-gray"></i> Unopened
-                </div>
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar"></i> Number of emails sent
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="card card-chart">
-              <div class="card-header">
-                <h5 class="card-title">NASDAQ: AAPL</h5>
-                <p class="card-category">Line Chart with Points</p>
-              </div>
-              <div class="card-body">
-                <canvas id="speedChart" width="400" height="100"></canvas>
               </div>
               <div class="card-footer">
-                <div class="chart-legend">
-                  <i class="fa fa-circle text-info"></i> Tesla Model S
-                  <i class="fa fa-circle text-warning"></i> BMW 5 Series
+                <hr>
+                <div class="stats">
+                  <i class="fa fa-refresh"></i> Atualizado agora
                 </div>
-                <hr />
-                <div class="card-stats">
-                  <i class="fa fa-check"></i> Data information certified
-                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de trocas pendentes -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Trocas Pendentes</h4>
+              </div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead class="text-primary">
+                    <tr>
+                      <th>ID</th>
+                      <th>Aluno</th>
+                      <th>Produto</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($trocas as $troca) : ?>
+                      <tr>
+                        <td><?= $troca['id']; ?></td>
+                        <td><?= $troca['aluno_nome']; ?></td>
+                        <td><?= $troca['produto_nome']; ?></td>
+                        <td><span class="badge badge-warning">Pendente</span></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Missões Pendentes</h4>
+              </div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead class="text-primary">
+                    <tr>
+                      <th>Aluno</th>
+                      <th>Missão</th>
+                      <th>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php foreach ($solicitacoes as $solicitacao): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($solicitacao['aluno_nome']); ?></td>
+                                            <td><?= htmlspecialchars($solicitacao['missao_nome']); ?></td>
+                                            <td>
+                                                <form method="POST" action="processar_aprovacao.php">
+                                                    <input type="hidden" name="solicitacao_id" value="<?= $solicitacao['solicitacao_id']; ?>">
+                                                    <button class="btn btn-success btn-sm" type="submit" name="acao" value="aprovar">Aprovar</button>
+                                                    <button class="btn btn-danger btn-sm" type="submit" name="acao" value="rejeitar">Rejeitar</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer class="footer footer-black  footer-white ">
+
+      <footer class="footer">
         <div class="container-fluid">
           <div class="row">
             <nav class="footer-nav">
-
-            <div class="credits ml-auto">
-              <span class="copyright">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>, made with <i class="fa fa-heart heart"></i> by Creative Tim
-              </span>
-            </div>
+              <div class="credits ml-auto">
+                <span class="copyright">
+                  © <script>document.write(new Date().getFullYear())</script>, feito com <i class="fa fa-heart heart"></i> pela Creative Tim
+                </span>
+              </div>
+            </nav>
           </div>
         </div>
       </footer>
     </div>
   </div>
-  <!--   Core JS Files   -->
+
+  <!-- JS Files -->
   <script src="../assets/js/core/jquery.min.js"></script>
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
   <script src="../assets/js/plugins/chartjs.min.js"></script>
-  <!--  Notifications Plugin    -->
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1"></script>
   <script src="../assets/demo/demo.js"></script>
   <script>
     $(document).ready(function() {
-      // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
+      $(".navbar-toggler").click(function() {
+        $(this).find(".navbar-toggler-bar").toggle();
+      });
+
       demo.initChartsPages();
     });
   </script>

@@ -19,9 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['usuario_nome'] = $usuario['nome'];
             $_SESSION['tipo_usuario'] = $usuario['tipo_usuario'];
-        
+
+            // Armazena o ID do professor na sessão, se o tipo de usuário for "professor"
             if ($usuario['tipo_usuario'] === 'professor') {
-                header("Location: painel/professor_dashboard.php");
+                $_SESSION['professor_id'] = $usuario['id']; // Armazena o ID do professor
+                header("Location: painel/professor/professor_dashboard.php");
             } elseif ($usuario['tipo_usuario'] === 'secretaria') {
                 header("Location: painel/secretaria/paginas/dashboard.php");
             }
@@ -30,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Senha inválida
             $erro = "Senha inválida.";
         }
-        
     } else {
         // E-mail não encontrado
         $erro = "E-mail não encontrado.";

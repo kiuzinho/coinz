@@ -1,9 +1,9 @@
 <?php
 // Configuração do banco de dados
-$host = 'localhost';
-$dbname = 'game';
-$username = 'root';
-$password = '';
+$host = 'localhost'; // Nome do servidor (localhost para XAMPP)
+$dbname = 'game'; // Nome do banco de dados
+$username = 'root'; // Usuário do banco de dados (padrão é root no XAMPP)
+$password = ''; // Senha do banco de dados (padrão é vazio no XAMPP)
 
 try {
     // Cria a conexão com o banco de dados usando PDO
@@ -14,4 +14,3 @@ try {
     die("Erro ao conectar ao banco de dados: " . $e->getMessage());
 }
 ?>
-    

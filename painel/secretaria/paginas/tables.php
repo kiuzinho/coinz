@@ -47,25 +47,32 @@ Coded by www.creative-tim.com
   <!-- CSS Files -->
   <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <style>
+    .navbar-toggler-bar {
+      display: none;
+    }
+    .main-panel.d-md-none .navbar-nav .nav-link {
+    color: #000 !important; /* Define a cor do texto como preta */
+  }
+
+  .main-panel.d-md-none .navbar-nav .nav-link:hover {
+    color: #007bff !important; /* Cor de hover azul */
+  }
+  </style>
+
 </head>
 
-<body class="">
-  <div class="wrapper ">
+<body>
+  <div class="wrapper">
     <div class="sidebar" data-color="white" data-active-color="danger">
       <div class="logo">
-        <a href="https://www.creative-tim.com" class="simple-text logo-mini">
+        <a href="dashboard.php" class="simple-text logo-mini">
           <div class="logo-image-small">
-            <img src="../assets/img/logo-small.png">
+            <img src="../assets/img/logo-small.png" alt="Logo">
           </div>
-          <!-- <p>CT</p> -->
         </a>
         <a href="dashboard.php" class="simple-text logo-normal">
-          Colégio
-          <!-- <div class="logo-image-big">
-            <img src="../assets/img/logo-big.png">
-          </div> -->
+          Painel
         </a>
       </div>
       <div class="sidebar-wrapper">
@@ -77,19 +84,12 @@ Coded by www.creative-tim.com
             </a>
           </li>
           <li>
-            <a href="./icons.php">
-              <i class="nc-icon nc-diamond"></i>
-              <p>Icons</p>
+            <a href="./editar_professor.php">
+              <i class="nc-icon nc-glasses-2"></i>
+              <p>Editar Professores</p>
             </a>
           </li>
-
           <li>
-            <a href="./notifications.php">
-              <i class="nc-icon nc-bell-55"></i>
-              <p>Notifications</p>
-            </a>
-          </li>
-          <li >
             <a href="./editar_loja.php">
               <i class="nc-icon nc-basket"></i>
               <p>Editar Loja</p>
@@ -103,60 +103,81 @@ Coded by www.creative-tim.com
           </li>
           <li>
             <a href="./editar_aluno.php">
-              <i class="nc-icon nc-caps-small"></i>
+              <i class="nc-icon nc-single-02"></i>
               <p>Editar Aluno</p>
             </a>
           </li>
-          <li class="active-pro">
-            <a href="./upgrade.php">
-              <i class="nc-icon nc-spaceship"></i>
-              <p>Upgrade to PRO</p>
+          <li>
+            <a href="./editar_secretaria.php">
+              <i class="nc-icon nc-badge"></i>
+              <p>Editar Secretários</p>
+            </a>
+          </li>
+          <li>
+            <a href="./missoes.php">
+              <i class="nc-icon nc-user-run"></i>
+              <p>Aprovar Missões</p>
+            </a>
+          </li>
+          <li>
+            <a href="./editar_missoes.php">
+              <i class="nc-icon nc-controller-modern"></i>
+              <p>Editar Missões</p>
+            </a>
+          </li>
+          <li>
+            <a href="./turmas.php">
+              <i class="nc-icon nc-controller-modern"></i>
+              <p>Turmas</p>
             </a>
           </li>
         </ul>
       </div>
     </div>
+
+    <!-- Painel principal para dispositivos móveis -->
+    <div class="main-panel d-md-none"> <!-- Visível apenas em dispositivos móveis -->
+      <!-- Aqui vai o conteúdo do painel principal -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler-icon" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item ">
+              <a class="nav-link" href="dashboard.php">Dashboard <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active" >
+              <a class="nav-link" href="tables.php">Aprovar Compras</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_professor.php">Editar Professores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_secretaria.php">Editar Secretários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_aluno.php">Editar Alunos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="editar_loja.php">Editar Loja</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="missoes.php">Aprovar Missões</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Painel principal para telas grandes -->
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
         <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <div class="navbar-toggle">
-              <button type="button" class="navbar-toggler">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-              </button>
-            </div>
-            <a class="navbar-brand" href="javascript:;">Dashboard da Secretaria</a>
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-          </button>
           <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <form>
-              <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <i class="nc-icon nc-zoom-split"></i>
-                  </div>
-                </div>
-              </div>
-            </form>
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link btn-magnify" href="javascript:;">
-                  <i class="nc-icon nc-layout-11"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Stats</span>
-                  </p>
-                </a>
-              </li>
               <li class="nav-item btn-rotate dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="nc-icon nc-bell-55"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Some Actions</span>
@@ -169,7 +190,7 @@ Coded by www.creative-tim.com
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link btn-rotate" href="javascript:;">
+                <a class="nav-link btn-rotate" href="javascript:;" data-bs-toggle="modal" data-bs-target="#editAccountModal">
                   <i class="nc-icon nc-settings-gear-65"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Account</span>
@@ -180,7 +201,6 @@ Coded by www.creative-tim.com
           </div>
         </div>
       </nav>
-      <!-- End Navbar -->
       <div class="content">
         <div class="row">
           <div class="col-md-12">

@@ -86,8 +86,8 @@ if (!$troca) {
 						<div class="hero-card1">
 
 							<div class="card-content">
-								<h3>Parabéns! Você acabou de ganhar um <strong><?= htmlspecialchars($produto['nome']); ?></strong>.</h3> 
-								<p>Vá até a secretaria para retirar seu prêmio! 🤑</p> <!-- Descrição  -->
+								<h3 class="branco">Parabéns! Você acabou de ganhar um <strong><?= htmlspecialchars($produto['nome']); ?></strong>.</h3> 
+								<p class="branco">Vá até a secretaria para retirar seu prêmio! 🤑</p> <!-- Descrição  -->
                                 <div>
                                 <br>
 
